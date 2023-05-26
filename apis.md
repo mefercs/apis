@@ -49,6 +49,15 @@ they start the **next()** function in the stack.
   //We bind a Middleware with app.use() || app.METHOD()
   // The second argument is called the mounth path 
   app.use("/user/:id", <mware-handler>);
+
+  //mounting multiple mware functions at the same mount path
+  app.use('/user/:id', (req, res, next) => {
+    console.log('Request URL:', req.originalUrl)
+    next()
+  }, (req, res, next) => {
+    console.log('Request Type:', req.method)
+    next()
+  })
   ```
 
 When we are done, we should call the next() function, or our cycle will
@@ -58,3 +67,6 @@ stuck forever.
 
 There is no big difference between, the Middleware prepares the incoming
 request and prepares it for further processing by other handlers.
+
+
+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
