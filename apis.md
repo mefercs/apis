@@ -50,7 +50,7 @@ they start the **next()** function in the stack.
   // The second argument is called the mounth path 
   app.use("/user/:id", <mware-handler>);
 
-  //mounting multiple mware functions at the same mount path
+  //mounting multiple mware functions at the same mount path for all kind of request
   app.use('/user/:id', (req, res, next) => {
     console.log('Request URL:', req.originalUrl)
     next()
@@ -58,6 +58,20 @@ they start the **next()** function in the stack.
     console.log('Request Type:', req.method)
     next()
   })
+  
+  //mounting multiple mware functions at the same mount path but just for get requests
+  app.get('/user/:id', (req, res, next) => {
+    console.log('ID:', req.params.id)
+    next()
+  }, (req, res, next) => {
+    res.send('User Info')
+  })
+  
+  // handler for the /user/:id path, which prints the user ID
+  app.get('/user/:id', (req, res, next) => {
+    res.send(req.params.id)
+  })
+
   ```
 
 When we are done, we should call the next() function, or our cycle will
