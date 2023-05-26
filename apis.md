@@ -69,7 +69,7 @@ they start the **next()** function in the stack.
   
   // handler for the /user/:id path, which prints the user ID
   app.get('/user/:id', (req, res, next) => {
-    res.send(req.params.id)
+    res.send(req.params.id) // this ends the req-res cycle as well as next()
   })
 
   ```
@@ -81,6 +81,8 @@ stuck forever.
 
 There is no big difference between, the Middleware prepares the incoming
 request and prepares it for further processing by other handlers.
+Whereas a route handler is code that is looking for a
+request to a specific incoming URL.
 
 
 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
