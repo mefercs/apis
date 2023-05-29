@@ -171,6 +171,3 @@ app.route("/name").post((req, res) => {
 - DELETE: Delete a resource
 
 Payload: Data within the request body.
-
-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
-TODO: LAST TOPIC: Body parser to parse a POST requests
