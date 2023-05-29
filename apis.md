@@ -1,5 +1,3 @@
-Last minute: 43:48
-
 - SDK : Software Developer Kit
   The important things:
 - Authentication: Validates the URL to recive the data.
@@ -27,9 +25,9 @@ app.METHOD( "/route", <handler>)
 
 ```
 
-### Middleware
+## Middleware
 
-They are functions that of the next form:
+They are functions of the next form:
 
 ```js
 function(req,res,next){
@@ -84,7 +82,30 @@ request and prepares it for further processing by other handlers.
 Whereas a route handler is code that is looking for a
 request to a specific incoming URL.
 
+## Route parameters from the client
+
+They are named segments of the url separated with (/) slashes.
+```
+route_path: '/user/:userId/book/:bookId'
+actual_request_URL: '/user/546/book/6754'
+req.params: {userId: '546', bookId: '6754'}
+```
+req.params is the object that capture these values.
+
+## Query parameters from the client
+
+The query string is another way to get input from the client, and is
+delimited by the (?) question mark sign, and includes field=value couples, where
+each couple is separated by (&) ampersands.
+
+```
+app.route("path").get(<handler>).post(<handler>)
+//chain multiple methods at the same path for a cleaner code
+```
+
+## Post
+
+It is used to send data through html forms
 
 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
-
-//get route parameter input from client
+TODO: LAST TOPIC:  Body parser to parse a POST requests
