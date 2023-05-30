@@ -43,6 +43,7 @@ const someFunc = (done) => {
   else done(null, data); // on success
 };
 ```
+
 ## SCHEMAS
 
 They translate JS objects to Mongo DB models
@@ -59,7 +60,7 @@ They translate JS objects to Mongo DB models
     - type: Date
     - type: Mixed
     - type: ObjectId
-    - required: true/false
+    - required: true/false //this is a validator
   - Models: Take a schema and create an instance of a document with **mongoose**,
     is like creating an instance of a class where the class is the schema and
     the model is the instance of that object/class. They allow us to CRUD with the database.
@@ -71,16 +72,88 @@ They translate JS objects to Mongo DB models
 
 ```js
 let mongoose = require("mongoose");
-const puppySchema = new mongoose.schema({
-  name: { //object schema type
+const puppySchema = new mongoose.Schema({ //Schema is with cappital initial letter
+  name: {
+    //object schema type
     type: String,
-    required: true
+    required: true,
   },
-  age: Number //Simple schema type
+  age: Number, //Simple schema type
 });
 
-const Puppy = mongoose.model('Puppy', puppySchema)  // Creating a model
-// The models are what we export
+const Puppy = mongoose.model("Puppy", puppySchema); // Creating a model
+// The models are what we export => mongoose.model('ModelName', schemaName)
+// Then we can create an instance of that model in the following form
+let puppy1 = new Puppy({
+  name: "Ferxo",
+  age: 13,
+});
+// When working with emails we should use the next form
+let mongoose = require("mongoose");
+let validator = require("validator"); //validators
+
+let emailSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    validate: (value) => {
+      return validator.isEmail(value);
+    },
+  },
+});
+module.exports = mongoose.model("Email", emailSchema);
 ```
 
+## (Create | CRUD) a record to the DB
 
+```js
+let EmailModel = require("./email");
+
+let msg = new EmailModel({
+  email: "ADA.LOVELACE@GMAIL.COM", //this will be parsed lowercase because our schema definition
+});
+
+msg
+  .save()
+  .then((doc) => {
+    console.log(doc); //returned document upon a successful save
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+```
+
+## (Read | CRUD) Fetch with the model
+
+```js
+EmailModel.find({
+  name: "something@gmail.com", //This means searching for a model within the EmailModel collection
+})
+  .then((doc) => console.log(doc))
+  .catch((err) => console.log(err));
+```
+
+## (Update | CRUD)
+
+```js
+EmailModel.findOneAndUpdate(
+  { name:'something@gmail.com' },  //old value
+  { name:"another@gmail.com"}, //new value
+  {
+    new: true,
+    runValidators: true
+  }
+).then(<>).catch(<>)
+```
+
+## (Delete | CRUD) Remove
+
+```js
+EmailModel.findOneAndRemove(
+    {
+      name:"something@gmail.com"
+    }
+    ).then(<>).catch(<>)
+```
