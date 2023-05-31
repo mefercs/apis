@@ -167,12 +167,14 @@ For example when we want to poblate our database with initial data.
 ```js
 ModelName.create([<array of documents>]).then(<code>).catch(<codeOnErr>);
 //Example
-Person.create()...;
+Person.create(); //... and the try and catch of the second callback function argument
 ```
 
 ## (Read | CRUD) Fetch with the model
 
 ```js
+// The general form is <ModelName>.find( <JSON> ).then.catch
+
 EmailModel.find({
   //It acceps a JSON object, and the second argument a callback
   name: "something@gmail.com", //This means searching for a document within the EmailModel collection
@@ -188,6 +190,11 @@ form
 function(err,doc){
   //<code>
   }
+```
+
+### Find one for a single matching
+```js
+ModelName.findOne( <JSON> );  // and then the then and catch
 ```
 
 ## (Update | CRUD)
