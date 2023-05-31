@@ -32,7 +32,7 @@ And a model allow us to create instances of our objects called documents.
 
 - In real servers the interaction with the database happens through handler functions.
 
-### Handler
+### Handler DONE
 
 We use a done argument, which is a callback function, that tell us we can proceed after
 an asynchronous operation. And by node convention should be called with the next forms:
@@ -65,14 +65,15 @@ They translate JS objects to Mongo DB models
     is like creating an instance of a class where the class is the schema and
     the model is the instance of that object/class. They allow us to CRUD with the database.
     So a model is a SCHEMA WRAPPER. The model is the mean between the schema and the DB.
-- Documents: A record of data in the **Mongo DB**
+- Documents: A record of data in the **Mongo DB**, they are created from Model instances.
   - Fields: Properties or atributes.
 
 ### CREATING AN SCHEMA
 
 ```js
 let mongoose = require("mongoose");
-const puppySchema = new mongoose.Schema({ //Schema is with cappital initial letter
+const puppySchema = new mongoose.Schema({
+  //Schema is with cappital initial letter
   name: {
     //object schema type
     type: String,
@@ -125,14 +126,68 @@ msg
   });
 ```
 
+Here is another example
+
+```js
+/** 1) Install & Set up mongoose */
+
+const mongoose = require("mongoose");
+mongoose.connect(process.env.MONGO_URI);
+
+/** 2) Create a 'Person' Model */
+var personSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  favoriteFoods: [String],
+});
+
+/** 3) Create and Save a Person */
+var Person = mongoose.model("Person", personSchema);
+
+var createAndSavePerson = function (done) {
+  var janeFonda = new Person({
+    name: "Jane Fonda",
+    age: 84,
+    favoriteFoods: ["eggs", "fish", "fresh fruit"],
+  });
+
+  janeFonda.save(function (err, data) {
+    if (err) return console.error(err);
+    done(null, data);
+  });
+};
+```
+
+- Both cases are OK
+
+### Create multiple documents
+
+For example when we want to poblate our database with initial data.
+
+```js
+ModelName.create([<array of documents>]).then(<code>).catch(<codeOnErr>);
+//Example
+Person.create()...;
+```
+
 ## (Read | CRUD) Fetch with the model
 
 ```js
 EmailModel.find({
-  name: "something@gmail.com", //This means searching for a model within the EmailModel collection
+  //It acceps a JSON object, and the second argument a callback
+  name: "something@gmail.com", //This means searching for a document within the EmailModel collection
 })
   .then((doc) => console.log(doc))
   .catch((err) => console.log(err));
+```
+
+Or we can use the approach of double argument, when the second arguments is a function callback of the next
+form
+
+```js
+function(err,doc){
+  //<code>
+  }
 ```
 
 ## (Update | CRUD)
