@@ -121,12 +121,14 @@ app.use( <route> , function( done ) {
     .save()
     .then((doc) => {
       console.log(doc); //returned document upon a successful save
+      done(null, doc);
       // we should wrape this function, to be able to catch it in a function that dictates
       // that it will be an asynchronous call, so we can use the done() function callback
       // and then finish this with that info
     })
     .catch((err) => {
       console.error(err);
+      done(err); // we use done because we call an asynchronous operation with the app.METHOD
     });
 });
 
