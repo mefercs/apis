@@ -3,6 +3,7 @@
 - [Tutorial link](https://www.freecodecamp.org/news/get-started-with-mongodb-atlas/)
 - URI: Uniform Resource Identifier
 - URL: Uniform Resource Locator
+- remember to use a done() function in a app.METHOD to treat with asynchronous operations
 
 We import the mongoose package in the package.json
 
@@ -42,6 +43,24 @@ const someFunc = (done) => {
   if (error) done(err); //on error
   else done(null, data); // on success
 };
+
+// here is an example of a done definition
+createPeople(req.body, function (err, data) {
+      clearTimeout(t);
+      if (err) {
+        return next(err);
+      }
+      if (!data) {
+        console.log("Missing `done()` argument");
+        return next({ message: "Missing callback argument" });
+      }
+      Person.find({}, function (err, pers) {
+        if (err) {
+          return next(err);
+        }
+        res.json(pers);
+        Person.remove().exec();
+      });
 ```
 
 ## SCHEMAS
