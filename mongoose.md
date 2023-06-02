@@ -116,14 +116,20 @@ let msg = new EmailModel({
   email: "ADA.LOVELACE@GMAIL.COM", //this will be parsed lowercase because our schema definition
 });
 
-msg
-  .save()
-  .then((doc) => {
-    console.log(doc); //returned document upon a successful save
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+app.use( <route> , function( done ) {
+  msg
+    .save()
+    .then((doc) => {
+      console.log(doc); //returned document upon a successful save
+      // we should wrape this function, to be able to catch it in a function that dictates
+      // that it will be an asynchronous call, so we can use the done() function callback
+      // and then finish this with that info
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
 ```
 
 Here is another example
@@ -193,6 +199,7 @@ function(err,doc){
 ```
 
 ### Find one for a single matching
+
 ```js
 ModelName.findOne( <JSON> );  // and then the then and catch
 ```
