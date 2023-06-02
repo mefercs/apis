@@ -76,7 +76,7 @@ they start the **next()** function in the stack.
 When we are done, we should call the next() function, or our cycle will
 stuck forever.
 
-## Middleware & route hKndler
+## Middleware & route handler
 
 There is no big difference between, the Middleware prepares the incoming
 request and prepares it for further processing by other handlers.
