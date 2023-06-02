@@ -116,7 +116,7 @@ let msg = new EmailModel({
   email: "ADA.LOVELACE@GMAIL.COM", //this will be parsed lowercase because our schema definition
 });
 
-app.use( <route> , function( done ) {
+app.use( <route> , function( done ) { // We can separate this function, the handler for next calls
   msg
     .save()
     .then((doc) => {
