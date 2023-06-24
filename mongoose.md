@@ -4,6 +4,8 @@
 - URI: Uniform Resource Identifier
 - URL: Uniform Resource Locator
 - remember to use a done() function in a app.METHOD to treat with asynchronous operations
+  - the done() function is still a middleware.
+- To search for a document withing a model, we must use the model to call the actions (save, findOne,...)
 
 We import the mongoose package in the package.json
 
@@ -13,7 +15,7 @@ We import the mongoose package in the package.json
   }
 ```
 
-We shuold obtain first our MONGO_URI variable from MONGO ATLAS, and finally, this
+We should obtain first our MONGO_URI variable from MONGO ATLAS, and finally, this
 is log in in the [Tutorial link](https://www.freecodecamp.org/news/get-started-with-mongodb-atlas/)
 and then we need to create a .env variable to store our MONGO_URI. Remember that you obtained
 your password in the mongo atlas, so then you can add it to the MONGO_URI, with the steps
@@ -38,6 +40,7 @@ And a model allow us to create instances of our objects called documents.
 We use a done argument, which is a callback function, that tell us we can proceed after
 an asynchronous operation. And by node convention should be called with the next forms:
 
+
 ```js
 const someFunc = (done) => {
   if (error) done(err); //on error
@@ -45,7 +48,8 @@ const someFunc = (done) => {
 };
 
 // here is an example of a done definition
-createPeople(req.body, function (err, data) {
+// The createPeople is a function that requires first data and then the done function
+createPeople(req.body, function (err, data) { // the second argument is the done function
       clearTimeout(t);
       if (err) {
         return next(err);
@@ -61,6 +65,17 @@ createPeople(req.body, function (err, data) {
         res.json(pers);
         Person.remove().exec();
       });
+// here is another one in action
+app.get('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) { // the second argument is the "done()" function
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/login'); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/users/' + user.username);
+    });
+  })(req, res, next);
+});
 ```
 
 ## SCHEMAS
@@ -172,6 +187,7 @@ var personSchema = new mongoose.Schema({
 var Person = mongoose.model("Person", personSchema);
 
 var createAndSavePerson = function (done) {
+  //btw this is the function structure to perform the route handler of a method, which is wrapping the mongoose action
   var janeFonda = new Person({
     name: "Jane Fonda",
     age: 84,
@@ -225,6 +241,13 @@ function(err,doc){
 ModelName.findOne( <JSON> );  // and then the then and catch
 ```
 
+### Find by id
+
+```js
+Model.findById( <id code> ).then().catch();
+Model.findById( <id code> )
+```
+
 ## (Update | CRUD)
 
 ```js
@@ -247,3 +270,5 @@ EmailModel.findOneAndRemove(
     }
     ).then(<>).catch(<>)
 ```
+
+

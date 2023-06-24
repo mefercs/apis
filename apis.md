@@ -101,9 +101,12 @@ The query string is another way to get input from the client, and is
 delimited by the (?) question mark sign, and includes field=value couples, where
 each couple is separated by (&) ampersands.
 
-```
+```js
 app.route("path").get(<handler>).post(<handler>)
 //chain multiple methods at the same path for a cleaner code
+
+//this is an example of a query
+  name=John+Doe&age=25 //query string encoded
 ```
 
 ## Post
