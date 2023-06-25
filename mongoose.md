@@ -141,6 +141,42 @@ let emailSchema = new mongoose.Schema({
 module.exports = mongoose.model("Email", emailSchema);
 ```
 
+## Chain multiple query helpers to narrow the search results
+
+```js
+Person.find({ age: 55 })
+  .sort({ name: -1 })
+  .limit(5)
+  .select({ favoriteFoods: 0 })
+  .exec(function(error, people) {
+    //do something here
+  });
+// Or we can either
+Person.find({ age: 55 })
+  .sort({ name: -1 })
+  .limit(5)
+  .select({ favoriteFoods: 0 })
+  .exec.then(<>)
+
+
+const queryChain = done => {
+	const foodToSearch = 'burrito'
+	Person.find({ favoriteFoods: foodToSearch })
+		.sort({ name: 1 })
+		.limit(2)
+		.select({ age: 0 })
+		.exec((err, data) => {
+			if (err) return done(err)
+			done(null, data)
+		})
+}
+// The same function with 2 different way to use the final exec()
+const queryChain = (done) => {
+    const foodToSearch = "burrito";
+    Person.find({favoriteFoods: foodToSearch}).sort({name:1}).limit(2).select({age:0}).exec().then(data=>done(null,data)).catch(err=>done(err));
+};
+```
+
 ## (Create | CRUD) a record to the DB
 
 ```js
@@ -248,6 +284,35 @@ Model.findById( <id code> ).then().catch();
 Model.findById( <id code> )
 ```
 
+### Find and edit then save
+
+```js
+const findEditThenSave = (personId, done) => {
+    Person.findById(personId).then(data => {
+        data["favoriteFoods"].push("hamburger");
+        console.log(data)
+        data.save().then( data => done(null, data)).catch( err => done(err));   
+    }).catch(err => {
+        console.log(err);
+        done(err);
+    })
+};
+```
+
+### Find and update
+
+```js
+const findAndUpdate = (personName, done) => {
+  const ageToSet = 20;
+
+  Person.findOneAndUpdate({name: personName}, {age: ageToSet}, {new: true}, (err, updatedDoc) => {
+    if(err) return console.log(err);
+    done(null, updatedDoc);
+  })
+};
+```
+
+
 ## (Update | CRUD)
 
 ```js
@@ -270,5 +335,17 @@ EmailModel.findOneAndRemove(
     }
     ).then(<>).catch(<>)
 ```
+
+### Find by id and remove
+
+```js
+const removeById = (personId, done) => {
+    Person.findByIdAndRemove(personId).then(data => done(null,data)).catch(err=>done(err))
+};
+```
+
+### Delete many documents using a criteria
+
+We use the Model.remove()
 
 
