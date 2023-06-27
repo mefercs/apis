@@ -174,8 +174,3 @@ app.route("/name").post((req, res) => {
 - DELETE: Delete a resource
 
 Payload: Data within the request body.
-
-
-
-
-
