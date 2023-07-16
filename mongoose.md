@@ -50,7 +50,6 @@ const someFunc = (done) => {
 // here is an example of a done definition
 // The createPeople is a function that requires first data and then the done function
 createPeople(req.body, function (err, data) { // the second argument is the done function
-      clearTimeout(t);
       if (err) {
         return next(err);
       }
