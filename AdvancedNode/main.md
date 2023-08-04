@@ -23,7 +23,7 @@ app.get('/', (res,req) => { res.render(index,{title:"Hello",message: "World"}) }
 
 In a Pug file we can reference a varible with `#{variable_name}`
 
-### Express-session and passport.js
+## Express-session and passport.js
 
 It saves the session id as a cookie in the client, a session cookies is destroyed when the current browser window is closed. With 
 passport we get the session id. 
@@ -39,7 +39,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 ```
 
-### Serialization and deserialization
+## Serialization and deserialization
 
 We need to create this functions given by passport in
 our app application.
@@ -52,7 +52,9 @@ passprot.deserializeUser(callback);
 
 The callback function is called with 2 arguments like this : `callback(user, errorHalingfunction)`
 the error handling function a function that accepts 2 arguments, an error and unique key to
-identify the user or the object
+identify the user or the object,
+the next code should be placed out of a http request or
+something, because it defines the functions for passport.
 
 ```js
 passport.serializeUser((user, done) => { //main callback function, and done is the second callback function from passport that handles errors
@@ -61,7 +63,7 @@ passport.serializeUser((user, done) => { //main callback function, and done is t
 
 passport.deserializeUser((id, done) => { //the same
   myDataBase.findOne({ _id: new ObjectID(id) }, (err, doc) => {
-    done(null, null);
+    done(null, null); //The done function is specific to the program
   });
 });
 ```
