@@ -39,10 +39,29 @@ app.use(passport.initialize())
 app.use(passport.session())
 ```
 
+### Serialization and deserialization
+
+We need to create this functions given by passport in
+our app application.
+
 Serialization and deserialization are important concepts in regards to authentication. To serialize an object means to convert its contents into a small key that can then be deserialized into the original object. This is what allows us to know who has communicated with the server without having to send the authentication data, like the username and password, at each request for a new page.
 ```js
-passport.serializeUser(cb); //First argument is the full user object, the second is a callback used by passport
-// The callback expects 2 arguments an error and an unique key that should be returned by the callback
-passport.deserializeUser(cb); // 2 arguments, first the key, and the second the callback (err, fullObject)
+passport.serializeUser(callback);
+passprot.deserializeUser(callback);
 ```
 
+The callback function is called with 2 arguments like this : `callback(user, errorHalingfunction)`
+the error handling function a function that accepts 2 arguments, an error and unique key to
+identify the user or the object
+
+```js
+passport.serializeUser((user, done) => { //main callback function, and done is the second callback function from passport that handles errors
+  done(null, user._id);
+});
+
+passport.deserializeUser((id, done) => { //the same
+  myDataBase.findOne({ _id: new ObjectID(id) }, (err, doc) => {
+    done(null, null);
+  });
+});
+```
